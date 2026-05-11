@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(vercel deploy *)",
+      "Bash(python3)",
+      "Bash(node scripts/upload_april.mjs)"
+    ]
+  }
+}

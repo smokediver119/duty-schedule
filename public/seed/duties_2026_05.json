@@ -1,0 +1,483 @@
+[
+  {
+    "date": "2026-05-01",
+    "weekday": "금",
+    "type": "weekend_or_holiday",
+    "assignments": [
+      {
+        "shift": "day",
+        "supervisor": "박병철",
+        "leader": "남궁명",
+        "member": "장경재"
+      },
+      {
+        "shift": "night",
+        "supervisor": "서명원",
+        "leader": "이민철",
+        "member": "허준희"
+      }
+    ]
+  },
+  {
+    "date": "2026-05-02",
+    "weekday": "토",
+    "type": "weekend_or_holiday",
+    "assignments": [
+      {
+        "shift": "day",
+        "supervisor": "김동순",
+        "leader": "김용훈",
+        "member": "김예리"
+      },
+      {
+        "shift": "night",
+        "supervisor": "박종범",
+        "leader": "문준기",
+        "member": "조누리"
+      }
+    ]
+  },
+  {
+    "date": "2026-05-03",
+    "weekday": "일",
+    "type": "weekend_or_holiday",
+    "assignments": [
+      {
+        "shift": "day",
+        "supervisor": "김용열",
+        "leader": "신상익",
+        "member": "심지우"
+      },
+      {
+        "shift": "night",
+        "supervisor": "정문규",
+        "leader": "김규태",
+        "member": "백승범"
+      }
+    ]
+  },
+  {
+    "date": "2026-05-04",
+    "weekday": "월",
+    "type": "weekday",
+    "assignments": [
+      {
+        "shift": "full",
+        "supervisor": "정병천",
+        "leader": "권수진",
+        "member": "최중덕"
+      }
+    ]
+  },
+  {
+    "date": "2026-05-05",
+    "weekday": "화",
+    "type": "weekend_or_holiday",
+    "assignments": [
+      {
+        "shift": "day",
+        "supervisor": "전기옥",
+        "leader": "김기범",
+        "member": "양정태"
+      },
+      {
+        "shift": "night",
+        "supervisor": "유근성",
+        "leader": "우영미",
+        "member": "최원길"
+      }
+    ]
+  },
+  {
+    "date": "2026-05-06",
+    "weekday": "수",
+    "type": "weekday",
+    "assignments": [
+      {
+        "shift": "full",
+        "supervisor": "이지형",
+        "leader": "정민정",
+        "member": "김용직"
+      }
+    ]
+  },
+  {
+    "date": "2026-05-07",
+    "weekday": "목",
+    "type": "weekday",
+    "assignments": [
+      {
+        "shift": "full",
+        "supervisor": "서승찬",
+        "leader": "배덕은",
+        "member": "박홍석"
+      }
+    ]
+  },
+  {
+    "date": "2026-05-08",
+    "weekday": "금",
+    "type": "weekday",
+    "assignments": [
+      {
+        "shift": "full",
+        "supervisor": "박병철",
+        "leader": "이상범",
+        "member": "홍경동"
+      }
+    ]
+  },
+  {
+    "date": "2026-05-09",
+    "weekday": "토",
+    "type": "weekend_or_holiday",
+    "assignments": [
+      {
+        "shift": "day",
+        "supervisor": "서명원",
+        "leader": "윤지연",
+        "member": "김상우"
+      },
+      {
+        "shift": "night",
+        "supervisor": "김동순",
+        "leader": "유은귀",
+        "member": "유영우"
+      }
+    ]
+  },
+  {
+    "date": "2026-05-10",
+    "weekday": "일",
+    "type": "weekend_or_holiday",
+    "assignments": [
+      {
+        "shift": "day",
+        "supervisor": "박종범",
+        "leader": "김경태",
+        "member": "장경재"
+      },
+      {
+        "shift": "night",
+        "supervisor": "김용열",
+        "leader": "김수옥",
+        "member": "허준희"
+      }
+    ]
+  },
+  {
+    "date": "2026-05-11",
+    "weekday": "월",
+    "type": "weekday",
+    "assignments": [
+      {
+        "shift": "full",
+        "supervisor": "정문규",
+        "leader": "남궁명",
+        "member": "김예리"
+      }
+    ]
+  },
+  {
+    "date": "2026-05-12",
+    "weekday": "화",
+    "type": "weekday",
+    "assignments": [
+      {
+        "shift": "full",
+        "supervisor": "정병천",
+        "leader": "이민철",
+        "member": "조누리"
+      }
+    ]
+  },
+  {
+    "date": "2026-05-13",
+    "weekday": "수",
+    "type": "weekday",
+    "assignments": [
+      {
+        "shift": "full",
+        "supervisor": "전기옥",
+        "leader": "김용훈",
+        "member": "심지우"
+      }
+    ]
+  },
+  {
+    "date": "2026-05-14",
+    "weekday": "목",
+    "type": "weekday",
+    "assignments": [
+      {
+        "shift": "full",
+        "supervisor": "유근성",
+        "leader": "문준기",
+        "member": "백승범"
+      }
+    ]
+  },
+  {
+    "date": "2026-05-15",
+    "weekday": "금",
+    "type": "weekday",
+    "assignments": [
+      {
+        "shift": "full",
+        "supervisor": "이지형",
+        "leader": "신상익",
+        "member": "최중덕"
+      }
+    ]
+  },
+  {
+    "date": "2026-05-16",
+    "weekday": "토",
+    "type": "weekend_or_holiday",
+    "assignments": [
+      {
+        "shift": "day",
+        "supervisor": "서승찬",
+        "leader": "김규태",
+        "member": "양정태"
+      },
+      {
+        "shift": "night",
+        "supervisor": "박병철",
+        "leader": "권수진",
+        "member": "최원길"
+      }
+    ]
+  },
+  {
+    "date": "2026-05-17",
+    "weekday": "일",
+    "type": "weekend_or_holiday",
+    "assignments": [
+      {
+        "shift": "day",
+        "supervisor": "서명원",
+        "leader": "김기범",
+        "member": "김용직"
+      },
+      {
+        "shift": "night",
+        "supervisor": "김동순",
+        "leader": "우영미",
+        "member": "박홍석"
+      }
+    ]
+  },
+  {
+    "date": "2026-05-18",
+    "weekday": "월",
+    "type": "weekday",
+    "assignments": [
+      {
+        "shift": "full",
+        "supervisor": "박종범",
+        "leader": "정민정",
+        "member": "홍경동"
+      }
+    ]
+  },
+  {
+    "date": "2026-05-19",
+    "weekday": "화",
+    "type": "weekday",
+    "assignments": [
+      {
+        "shift": "full",
+        "supervisor": "김용열",
+        "leader": "배덕은",
+        "member": "김상우"
+      }
+    ]
+  },
+  {
+    "date": "2026-05-20",
+    "weekday": "수",
+    "type": "weekday",
+    "assignments": [
+      {
+        "shift": "full",
+        "supervisor": "정문규",
+        "leader": "이상범",
+        "member": "유영우"
+      }
+    ]
+  },
+  {
+    "date": "2026-05-21",
+    "weekday": "목",
+    "type": "weekday",
+    "assignments": [
+      {
+        "shift": "full",
+        "supervisor": "정병천",
+        "leader": "윤지연",
+        "member": "장경재"
+      }
+    ]
+  },
+  {
+    "date": "2026-05-22",
+    "weekday": "금",
+    "type": "weekday",
+    "assignments": [
+      {
+        "shift": "full",
+        "supervisor": "전기옥",
+        "leader": "유은귀",
+        "member": "허준희"
+      }
+    ]
+  },
+  {
+    "date": "2026-05-23",
+    "weekday": "토",
+    "type": "weekend_or_holiday",
+    "assignments": [
+      {
+        "shift": "day",
+        "supervisor": "유근성",
+        "leader": "김경태",
+        "member": "김예리"
+      },
+      {
+        "shift": "night",
+        "supervisor": "이지형",
+        "leader": "김수옥",
+        "member": "조누리"
+      }
+    ]
+  },
+  {
+    "date": "2026-05-24",
+    "weekday": "일",
+    "type": "weekend_or_holiday",
+    "assignments": [
+      {
+        "shift": "day",
+        "supervisor": "서승찬",
+        "leader": "남궁명",
+        "member": "심지우"
+      },
+      {
+        "shift": "night",
+        "supervisor": "박병철",
+        "leader": "이민철",
+        "member": "백승범"
+      }
+    ]
+  },
+  {
+    "date": "2026-05-25",
+    "weekday": "월",
+    "type": "weekend_or_holiday",
+    "assignments": [
+      {
+        "shift": "day",
+        "supervisor": "서명원",
+        "leader": "김용훈",
+        "member": "최중덕"
+      },
+      {
+        "shift": "night",
+        "supervisor": "김동순",
+        "leader": "문준기",
+        "member": "양정태"
+      }
+    ]
+  },
+  {
+    "date": "2026-05-26",
+    "weekday": "화",
+    "type": "weekday",
+    "assignments": [
+      {
+        "shift": "full",
+        "supervisor": "박종범",
+        "leader": "신상익",
+        "member": "최원길"
+      }
+    ]
+  },
+  {
+    "date": "2026-05-27",
+    "weekday": "수",
+    "type": "weekday",
+    "assignments": [
+      {
+        "shift": "full",
+        "supervisor": "김용열",
+        "leader": "김규태",
+        "member": "김용직"
+      }
+    ]
+  },
+  {
+    "date": "2026-05-28",
+    "weekday": "목",
+    "type": "weekday",
+    "assignments": [
+      {
+        "shift": "full",
+        "supervisor": "정문규",
+        "leader": "권수진",
+        "member": "박홍석"
+      }
+    ]
+  },
+  {
+    "date": "2026-05-29",
+    "weekday": "금",
+    "type": "weekday",
+    "assignments": [
+      {
+        "shift": "full",
+        "supervisor": "정병천",
+        "leader": "김기범",
+        "member": "홍경동"
+      }
+    ]
+  },
+  {
+    "date": "2026-05-30",
+    "weekday": "토",
+    "type": "weekend_or_holiday",
+    "assignments": [
+      {
+        "shift": "day",
+        "supervisor": "전기옥",
+        "leader": "우영미",
+        "member": "김상우"
+      },
+      {
+        "shift": "night",
+        "supervisor": "유근성",
+        "leader": "정민정",
+        "member": "유영우"
+      }
+    ]
+  },
+  {
+    "date": "2026-05-31",
+    "weekday": "일",
+    "type": "weekend_or_holiday",
+    "assignments": [
+      {
+        "shift": "day",
+        "supervisor": "이지형",
+        "leader": "배덕은",
+        "member": "장경재"
+      },
+      {
+        "shift": "night",
+        "supervisor": "서승찬",
+        "leader": "이상범",
+        "member": "허준희"
+      }
+    ]
+  }
+]

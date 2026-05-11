@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body {
+  height: 100%;
+  background: #f6f6f8;
+  color: #111;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 10mm;
+  }
+  body {
+    background: white !important;
+  }
+  header,
+  nav,
+  .no-print {
+    display: none !important;
+  }
+  main {
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+  .print-title {
+    display: block !important;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 800;
+    margin-bottom: 10px;
+  }
+  button,
+  .ring-amber-400,
+  .ring-2 {
+    box-shadow: none !important;
+  }
+  .grid.grid-cols-7 > button {
+    break-inside: avoid;
+  }
+}
+.print-title {
+  display: none;
+}

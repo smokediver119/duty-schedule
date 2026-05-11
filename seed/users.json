@@ -1,0 +1,398 @@
+[
+  {
+    "name": "김현태",
+    "dept": "행정과",
+    "rank": "소방령",
+    "role": "special",
+    "active": true,
+    "orderIndex": 0,
+    "ext": "350"
+  },
+  {
+    "name": "김연경",
+    "dept": "재난과",
+    "rank": "소방령",
+    "role": "special",
+    "active": true,
+    "orderIndex": 1,
+    "ext": "450"
+  },
+  {
+    "name": "장정애",
+    "dept": "예방과",
+    "rank": "소방령",
+    "role": "special",
+    "active": true,
+    "orderIndex": 2,
+    "ext": "550"
+  },
+  {
+    "name": "김용열",
+    "dept": "행정과",
+    "rank": "소방경",
+    "role": "supervisor",
+    "active": true,
+    "orderIndex": 0,
+    "ext": "310"
+  },
+  {
+    "name": "정문규",
+    "dept": "예방과",
+    "rank": "소방경",
+    "role": "supervisor",
+    "active": true,
+    "orderIndex": 1,
+    "ext": "520"
+  },
+  {
+    "name": "정병천",
+    "dept": "재난과",
+    "rank": "소방경",
+    "role": "supervisor",
+    "active": true,
+    "orderIndex": 2,
+    "ext": "430"
+  },
+  {
+    "name": "전기옥",
+    "dept": "행정과",
+    "rank": "소방경",
+    "role": "supervisor",
+    "active": true,
+    "orderIndex": 3,
+    "ext": "320"
+  },
+  {
+    "name": "유근성",
+    "dept": "재난과",
+    "rank": "소방경",
+    "role": "supervisor",
+    "active": true,
+    "orderIndex": 4,
+    "ext": "410"
+  },
+  {
+    "name": "이지형",
+    "dept": "예방과",
+    "rank": "소방경",
+    "role": "supervisor",
+    "active": true,
+    "orderIndex": 5,
+    "ext": "530"
+  },
+  {
+    "name": "서승찬",
+    "dept": "예방과",
+    "rank": "소방경",
+    "role": "supervisor",
+    "active": true,
+    "orderIndex": 6,
+    "ext": "524"
+  },
+  {
+    "name": "박병철",
+    "dept": "행정과",
+    "rank": "소방경",
+    "role": "supervisor",
+    "active": true,
+    "orderIndex": 7,
+    "ext": "330"
+  },
+  {
+    "name": "서명원",
+    "dept": "예방과",
+    "rank": "소방경",
+    "role": "supervisor",
+    "active": true,
+    "orderIndex": 8,
+    "ext": "510"
+  },
+  {
+    "name": "김동순",
+    "dept": "재난과",
+    "rank": "소방경",
+    "role": "supervisor",
+    "active": true,
+    "orderIndex": 9,
+    "ext": "420"
+  },
+  {
+    "name": "박종범",
+    "dept": "대응단",
+    "rank": "소방경",
+    "role": "supervisor",
+    "active": true,
+    "orderIndex": 10,
+    "ext": "613"
+  },
+  {
+    "name": "김경태",
+    "dept": "예방과",
+    "rank": "소방위",
+    "role": "leader",
+    "active": true,
+    "orderIndex": 0,
+    "ext": "511"
+  },
+  {
+    "name": "김수옥",
+    "dept": "재난과",
+    "rank": "소방위",
+    "role": "leader",
+    "active": true,
+    "orderIndex": 1,
+    "ext": "431"
+  },
+  {
+    "name": "남궁명",
+    "dept": "행정과",
+    "rank": "소방위",
+    "role": "leader",
+    "active": true,
+    "orderIndex": 2,
+    "ext": "311"
+  },
+  {
+    "name": "이민철",
+    "dept": "재난과",
+    "rank": "소방위",
+    "role": "leader",
+    "active": true,
+    "orderIndex": 3,
+    "ext": "411"
+  },
+  {
+    "name": "김용훈",
+    "dept": "예방과",
+    "rank": "소방위",
+    "role": "leader",
+    "active": true,
+    "orderIndex": 4,
+    "ext": "531"
+  },
+  {
+    "name": "문준기",
+    "dept": "행정과",
+    "rank": "소방위",
+    "role": "leader",
+    "active": true,
+    "orderIndex": 5,
+    "ext": "322"
+  },
+  {
+    "name": "신상익",
+    "dept": "예방과",
+    "rank": "소방위",
+    "role": "leader",
+    "active": true,
+    "orderIndex": 6,
+    "ext": "512"
+  },
+  {
+    "name": "김규태",
+    "dept": "예방과",
+    "rank": "소방위",
+    "role": "leader",
+    "active": true,
+    "orderIndex": 7,
+    "ext": "528"
+  },
+  {
+    "name": "권수진",
+    "dept": "행정과",
+    "rank": "소방장",
+    "role": "leader",
+    "active": true,
+    "orderIndex": 8,
+    "ext": "323"
+  },
+  {
+    "name": "김기범",
+    "dept": "재난과",
+    "rank": "소방위",
+    "role": "leader",
+    "active": true,
+    "orderIndex": 9,
+    "ext": "412"
+  },
+  {
+    "name": "우영미",
+    "dept": "행정과",
+    "rank": "소방위",
+    "role": "leader",
+    "active": true,
+    "orderIndex": 10,
+    "ext": "331"
+  },
+  {
+    "name": "정민정",
+    "dept": "행정과",
+    "rank": "소방위",
+    "role": "leader",
+    "active": true,
+    "orderIndex": 11,
+    "ext": "321"
+  },
+  {
+    "name": "배덕은",
+    "dept": "예방과",
+    "rank": "소방위",
+    "role": "leader",
+    "active": true,
+    "orderIndex": 12,
+    "ext": "526"
+  },
+  {
+    "name": "이상범",
+    "dept": "예방과",
+    "rank": "소방위",
+    "role": "leader",
+    "active": true,
+    "orderIndex": 13,
+    "ext": "514"
+  },
+  {
+    "name": "윤지연",
+    "dept": "재난과",
+    "rank": "소방위",
+    "role": "leader",
+    "active": true,
+    "orderIndex": 14,
+    "ext": "413"
+  },
+  {
+    "name": "유은귀",
+    "dept": "예방과",
+    "rank": "소방위",
+    "role": "leader",
+    "active": true,
+    "orderIndex": 15,
+    "ext": "525"
+  },
+  {
+    "name": "조누리",
+    "dept": "재난과",
+    "rank": "소방사",
+    "role": "member",
+    "active": true,
+    "orderIndex": 0,
+    "ext": "432"
+  },
+  {
+    "name": "심지우",
+    "dept": "재난과",
+    "rank": "소방교",
+    "role": "member",
+    "active": true,
+    "orderIndex": 1,
+    "ext": "422"
+  },
+  {
+    "name": "백승범",
+    "dept": "예방과",
+    "rank": "소방교",
+    "role": "member",
+    "active": true,
+    "orderIndex": 2,
+    "ext": "522"
+  },
+  {
+    "name": "최중덕",
+    "dept": "재난과",
+    "rank": "소방교",
+    "role": "member",
+    "active": true,
+    "orderIndex": 3,
+    "ext": "421"
+  },
+  {
+    "name": "양정태",
+    "dept": "행정과",
+    "rank": "소방사",
+    "role": "member",
+    "active": true,
+    "orderIndex": 4,
+    "ext": "314"
+  },
+  {
+    "name": "최원길",
+    "dept": "예방과",
+    "rank": "소방교",
+    "role": "member",
+    "active": true,
+    "orderIndex": 5,
+    "ext": "527"
+  },
+  {
+    "name": "김용직",
+    "dept": "예방과",
+    "rank": "소방교",
+    "role": "member",
+    "active": true,
+    "orderIndex": 6,
+    "ext": "523"
+  },
+  {
+    "name": "박홍석",
+    "dept": "행정과",
+    "rank": "소방교",
+    "role": "member",
+    "active": true,
+    "orderIndex": 7,
+    "ext": "313"
+  },
+  {
+    "name": "홍경동",
+    "dept": "예방과",
+    "rank": "소방교",
+    "role": "member",
+    "active": true,
+    "orderIndex": 8,
+    "ext": "513"
+  },
+  {
+    "name": "김상우",
+    "dept": "예방과",
+    "rank": "소방교",
+    "role": "member",
+    "active": true,
+    "orderIndex": 9,
+    "ext": "529"
+  },
+  {
+    "name": "유영우",
+    "dept": "행정과",
+    "rank": "소방장",
+    "role": "member",
+    "active": true,
+    "orderIndex": 12,
+    "ext": "333"
+  },
+  {
+    "name": "장경재",
+    "dept": "행정과",
+    "rank": "소방교",
+    "role": "member",
+    "active": true,
+    "orderIndex": 10,
+    "ext": "332"
+  },
+  {
+    "name": "허준희",
+    "dept": "예방과",
+    "rank": "소방장",
+    "role": "member",
+    "active": true,
+    "orderIndex": 13,
+    "ext": "521"
+  },
+  {
+    "name": "김예리",
+    "dept": "예방과",
+    "rank": "소방교",
+    "role": "member",
+    "active": true,
+    "orderIndex": 11,
+    "ext": "532"
+  }
+]
