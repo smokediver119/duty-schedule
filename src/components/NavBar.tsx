@@ -27,18 +27,22 @@ export function NavBar() {
   if (!session) return null;
 
   const isAdmin = session.role === "admin";
-  const tabs = [
-    { href: "/calendar", label: "캘린더", icon: "📅" },
-    { href: "/request", label: "요청", icon: "🔁" },
-    { href: "/inbox", label: "요청내역", icon: "📤" },
-    { href: "/chat", label: "채팅", icon: "💬", badge: "chat" as const },
-    ...(isAdmin
-      ? [
-          { href: "/admin", label: "관리자", icon: "🛠️", badge: "admin" as const },
-          { href: "/history", label: "이력", icon: "📜" },
-        ]
-      : []),
-  ];
+  const tabs = isAdmin
+    ? [
+        { href: "/calendar", label: "캘린더", icon: "📅" },
+        { href: "/rooms",    label: "예약",   icon: "🏢" },
+        { href: "/request",  label: "요청",   icon: "🔁" },
+        { href: "/chat",     label: "공지/채팅", icon: "💬", badge: "chat" as const },
+        { href: "/admin",    label: "관리자", icon: "🛠️", badge: "admin" as const },
+        { href: "/history",  label: "이력",   icon: "📜" },
+      ]
+    : [
+        { href: "/calendar", label: "캘린더",  icon: "📅" },
+        { href: "/request",  label: "요청",    icon: "🔁" },
+        { href: "/inbox",    label: "요청내역", icon: "📤" },
+        { href: "/chat",     label: "채팅",    icon: "💬", badge: "chat" as const },
+        { href: "/rooms",    label: "예약",    icon: "🏢", badge: "rooms" as const },
+      ];
 
   const logout = () => {
     clearSession();

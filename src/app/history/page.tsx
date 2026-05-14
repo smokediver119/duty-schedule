@@ -30,6 +30,10 @@ const EVENT_LABEL: Record<HistoryEvent, string> = {
   user_added: "👤 인원 추가",
   user_updated: "👤 인원 변경",
   user_deactivated: "👤 인원 비활성",
+  reservation_created:  "🏢 예약 신청",
+  reservation_approved: "✅ 예약 승인",
+  reservation_rejected: "❌ 예약 반려",
+  reservation_cancelled: "🚫 예약 취소",
 };
 
 function parseSlot(slot: string): { date: string; shift: string } {

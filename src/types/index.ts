@@ -77,6 +77,24 @@ export interface Holiday {
   name: string;
 }
 
+export type RoomId = "auditorium" | "small_meeting";
+export type ReservationStatus = "pending" | "approved" | "rejected" | "cancelled";
+
+export interface RoomReservation {
+  id: string;
+  room: RoomId;
+  date: string;        // YYYY-MM-DD (시작일)
+  endDate?: string;    // YYYY-MM-DD (종료일, 없으면 당일)
+  startTime: string;   // HH:MM
+  endTime: string;     // HH:MM
+  purpose: string;
+  requesterId: string;
+  status: ReservationStatus;
+  adminNote?: string;
+  createdAt: number;
+  updatedAt: number;
+}
+
 export type HistoryEvent =
   | "duty_generated"
   | "duty_manual_edit"
@@ -90,7 +108,11 @@ export type HistoryEvent =
   | "holiday_removed"
   | "user_added"
   | "user_updated"
-  | "user_deactivated";
+  | "user_deactivated"
+  | "reservation_created"
+  | "reservation_approved"
+  | "reservation_rejected"
+  | "reservation_cancelled";
 
 export interface HistoryLog {
   id: string;

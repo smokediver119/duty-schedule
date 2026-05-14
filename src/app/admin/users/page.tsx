@@ -7,6 +7,7 @@ import {
   deleteDoc,
   doc,
   updateDoc,
+  writeBatch,
 } from "firebase/firestore";
 import { AuthGuard } from "@/components/AuthGuard";
 import { NavBar } from "@/components/NavBar";
@@ -14,7 +15,7 @@ import { useUsers } from "@/hooks/useUsers";
 import { useAuth } from "@/hooks/useAuth";
 import { db } from "@/lib/firebase";
 import { logHistory } from "@/lib/history";
-import type { UserRank, UserRole } from "@/types";
+import type { User, UserRank, UserRole } from "@/types";
 
 const ROLE_LABELS: Record<UserRole, string> = {
   special: "특별경계",
@@ -75,13 +76,30 @@ export default function UsersPage() {
     });
   };
 
-  const grouped: Record<UserRole, typeof users> = {
+  const moveOrder = async (u: User, direction: "up" | "down") => {
+    const group = users
+      .filter((x) => x.role === u.role)
+      .sort((a, b) => a.orderIndex - b.orderIndex);
+    const idx = group.findIndex((x) => x.id === u.id);
+    const swapIdx = direction === "up" ? idx - 1 : idx + 1;
+    if (swapIdx < 0 || swapIdx >= group.length) return;
+    const other = group[swapIdx];
+    const batch = writeBatch(db);
+    batch.update(doc(db, "users", u.id), { orderIndex: other.orderIndex });
+    batch.update(doc(db, "users", other.id), { orderIndex: u.orderIndex });
+    await batch.commit();
+  };
+
+  const grouped: Record<UserRole, User[]> = {
     supervisor: [],
     leader: [],
     member: [],
     special: [],
   };
   users.forEach((u) => grouped[u.role].push(u));
+  (Object.keys(grouped) as UserRole[]).forEach((r) => {
+    grouped[r].sort((a, b) => a.orderIndex - b.orderIndex);
+  });
 
   return (
     <AuthGuard adminOnly>
@@ -147,21 +165,38 @@ export default function UsersPage() {
               <div className="text-sm text-gray-400">없음</div>
             ) : (
               <ul className="divide-y text-sm">
-                {grouped[roleKey].map((u) => (
+                {grouped[roleKey].map((u, idx) => (
                   <li
                     key={u.id}
-                    className="py-2 flex items-center gap-2 justify-between"
+                    className="py-2 flex items-center gap-2"
                   >
-                    <div className={u.active ? "" : "text-gray-400 line-through"}>
-                      <span className="text-xs text-gray-500 mr-2">
-                        #{u.orderIndex + 1}
-                      </span>
+                    {/* ↑↓ 순서 변경 버튼 */}
+                    <div className="flex flex-col shrink-0">
+                      <button
+                        onClick={() => moveOrder(u, "up")}
+                        disabled={idx === 0}
+                        className="text-gray-400 hover:text-gray-700 disabled:opacity-20 text-[10px] leading-tight px-1 py-0.5"
+                      >
+                        ▲
+                      </button>
+                      <button
+                        onClick={() => moveOrder(u, "down")}
+                        disabled={idx === grouped[roleKey].length - 1}
+                        className="text-gray-400 hover:text-gray-700 disabled:opacity-20 text-[10px] leading-tight px-1 py-0.5"
+                      >
+                        ▼
+                      </button>
+                    </div>
+
+                    <div className={`flex-1 min-w-0 ${u.active ? "" : "text-gray-400 line-through"}`}>
+                      <span className="text-xs text-gray-400 mr-1">#{idx + 1}</span>
                       <span className="font-medium">{u.name}</span>
-                      <span className="text-xs text-gray-500 ml-2">
+                      <span className="text-xs text-gray-500 ml-1.5">
                         [{u.rank}] · {u.dept}
                       </span>
                     </div>
-                    <div className="flex gap-1 items-center">
+
+                    <div className="flex gap-1 items-center shrink-0">
                       <select
                         value={u.role}
                         onChange={(e) => changeRole(u.id, e.target.value as UserRole)}

@@ -1,14 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { doc, runTransaction } from "firebase/firestore";
+import { doc, runTransaction, setDoc, updateDoc } from "firebase/firestore";
 import { AuthGuard } from "@/components/AuthGuard";
 import { NavBar } from "@/components/NavBar";
 import { useAuth } from "@/hooks/useAuth";
 import { useRequests } from "@/hooks/useRequests";
+import { useReservations } from "@/hooks/useReservations";
 import { db } from "@/lib/firebase";
 import { logHistory } from "@/lib/history";
-import type { DutyRequest, DutyAssignment } from "@/types";
+import type { DutyRequest, DutyAssignment, RoomReservation } from "@/types";
 import { useUsers } from "@/hooks/useUsers";
 import { useDuties } from "@/hooks/useDuties";
 import { useState, useMemo } from "react";
@@ -18,8 +19,14 @@ import type { Duty } from "@/types";
 export default function AdminPage() {
   const { session } = useAuth();
   const { requests } = useRequests();
+  const { reservations } = useReservations();
   const { users } = useUsers();
   const accepted = requests.filter((r) => r.status === "accepted");
+  const pendingRooms = reservations.filter((r) => r.status === "pending");
+
+  const [mainTab, setMainTab] = useState<"duty" | "rooms">("duty");
+  const [roomRejectingId, setRoomRejectingId] = useState<string | null>(null);
+  const [roomRejectNote, setRoomRejectNote]   = useState("");
   const [seeding, setSeeding] = useState(false);
   const [seedMsg, setSeedMsg] = useState("");
   const [remapping, setRemapping] = useState(false);
@@ -59,6 +66,29 @@ export default function AdminPage() {
 
   const nameOf = (id: string | null) =>
     id ? users.find((u) => u.id === id)?.name ?? "?" : "-";
+
+  const ROOM_LABELS = { auditorium: "강당", small_meeting: "소회의실" } as const;
+
+  const approveRoom = async (r: RoomReservation) => {
+    const now = Date.now();
+    await updateDoc(doc(db, "reservations", r.id), { status: "approved", updatedAt: now });
+    await setDoc(doc(db, "userInbox", r.requesterId), { rooms_lastAt: now }, { merge: true });
+    await logHistory("reservation_approved", session?.userId ?? null, { reservationId: r.id });
+  };
+
+  const rejectRoom = async (r: RoomReservation) => {
+    const now  = Date.now();
+    const note = roomRejectNote.trim();
+    await updateDoc(doc(db, "reservations", r.id), {
+      status: "rejected",
+      updatedAt: now,
+      ...(note ? { adminNote: note } : {}),
+    });
+    await setDoc(doc(db, "userInbox", r.requesterId), { rooms_lastAt: now }, { merge: true });
+    await logHistory("reservation_rejected", session?.userId ?? null, { reservationId: r.id, note });
+    setRoomRejectingId(null);
+    setRoomRejectNote("");
+  };
 
   const approveCore = async (req: DutyRequest) => {
     if (!req.targetId) throw new Error("대상자 없음");
@@ -420,149 +450,239 @@ export default function AdminPage() {
         </section>
 
         <section className="bg-white rounded-2xl p-4 border border-gray-200 shadow-sm">
-          <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center justify-between mb-3">
             <div className="font-bold">승인 대기</div>
             <span className="text-xs px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-semibold">
-              {accepted.length}건
+              {accepted.length + pendingRooms.length}건
             </span>
           </div>
 
-          {accepted.length > 0 && (
+          {/* 카테고리 탭 */}
+          <div className="flex gap-1 bg-gray-100 rounded-lg p-1 mb-3 text-xs">
+            {(["duty", "rooms"] as const).map((t) => (
+              <button
+                key={t}
+                onClick={() => { setMainTab(t); setSelectedIds(new Set()); }}
+                className={`flex-1 py-1.5 rounded-md font-semibold transition ${
+                  mainTab === t ? "bg-white shadow-sm text-brand" : "text-gray-500"
+                }`}
+              >
+                {t === "duty"
+                  ? `당직 교대${accepted.length > 0 ? ` (${accepted.length})` : ""}`
+                  : `시설 예약${pendingRooms.length > 0 ? ` (${pendingRooms.length})` : ""}`}
+              </button>
+            ))}
+          </div>
+
+          {/* 당직 교대 탭 */}
+          {mainTab === "duty" && (
             <>
-              <div className="flex gap-1 bg-gray-100 rounded-lg p-1 mb-2 text-xs">
-                {(["all", "swap", "substitute"] as const).map((k) => (
-                  <button
-                    key={k}
-                    onClick={() => { setTypeFilter(k); setSelectedIds(new Set()); }}
-                    className={`flex-1 py-1.5 rounded-md font-semibold ${
-                      typeFilter === k ? "bg-white shadow-sm text-brand" : "text-gray-500"
-                    }`}
-                  >
-                    {k === "all" ? "전체" : k === "swap" ? "맞교대" : "대신근무"}
-                  </button>
-                ))}
-              </div>
-              <div className="flex items-center justify-between mb-2 gap-2">
-                <label className="flex items-center gap-1.5 text-xs text-gray-600 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={selectedIds.size === filteredAccepted.length && filteredAccepted.length > 0}
-                    onChange={toggleSelectAll}
-                    className="w-4 h-4 accent-brand"
-                  />
-                  전체 선택
-                  {selectedIds.size > 0 && (
-                    <span className="text-brand font-semibold"> ({selectedIds.size}건)</span>
+              {accepted.length > 0 && (
+                <>
+                  <div className="flex gap-1 bg-gray-100 rounded-lg p-1 mb-2 text-xs">
+                    {(["all", "swap", "substitute"] as const).map((k) => (
+                      <button
+                        key={k}
+                        onClick={() => { setTypeFilter(k); setSelectedIds(new Set()); }}
+                        className={`flex-1 py-1.5 rounded-md font-semibold ${
+                          typeFilter === k ? "bg-white shadow-sm text-brand" : "text-gray-500"
+                        }`}
+                      >
+                        {k === "all" ? "전체" : k === "swap" ? "맞교대" : "대신근무"}
+                      </button>
+                    ))}
+                  </div>
+                  <div className="flex items-center justify-between mb-2 gap-2">
+                    <label className="flex items-center gap-1.5 text-xs text-gray-600 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={selectedIds.size === filteredAccepted.length && filteredAccepted.length > 0}
+                        onChange={toggleSelectAll}
+                        className="w-4 h-4 accent-brand"
+                      />
+                      전체 선택
+                      {selectedIds.size > 0 && (
+                        <span className="text-brand font-semibold"> ({selectedIds.size}건)</span>
+                      )}
+                    </label>
+                    <button
+                      onClick={bulkApprove}
+                      disabled={selectedIds.size === 0 || bulkRunning}
+                      className="text-xs bg-brand text-white px-3 py-1.5 rounded-lg font-semibold disabled:opacity-40"
+                    >
+                      {bulkRunning ? "승인 중..." : `일괄 승인 ${selectedIds.size || ""}`}
+                    </button>
+                  </div>
+                  {bulkMsg && (
+                    <pre className="text-[11px] text-gray-700 bg-gray-50 border rounded-lg p-2 mb-2 whitespace-pre-wrap">
+                      {bulkMsg}
+                    </pre>
                   )}
-                </label>
-                <button
-                  onClick={bulkApprove}
-                  disabled={selectedIds.size === 0 || bulkRunning}
-                  className="text-xs bg-brand text-white px-3 py-1.5 rounded-lg font-semibold disabled:opacity-40"
-                >
-                  {bulkRunning ? "승인 중..." : `일괄 승인 ${selectedIds.size || ""}`}
-                </button>
-              </div>
-              {bulkMsg && (
-                <pre className="text-[11px] text-gray-700 bg-gray-50 border rounded-lg p-2 mb-2 whitespace-pre-wrap">
-                  {bulkMsg}
-                </pre>
+                </>
+              )}
+
+              {accepted.length === 0 ? (
+                <div className="text-sm text-gray-400 py-3 text-center">대기 중인 요청 없음</div>
+              ) : filteredAccepted.length === 0 ? (
+                <div className="text-sm text-gray-400 py-3 text-center">해당 유형의 대기 요청 없음</div>
+              ) : (
+                <ul className="space-y-2">
+                  {filteredAccepted.map((r) => (
+                    <li
+                      key={r.id}
+                      className={`border rounded-xl p-3 text-sm bg-gradient-to-br from-amber-50/40 to-white ${
+                        selectedIds.has(r.id) ? "border-brand ring-1 ring-brand/30" : "border-gray-200"
+                      }`}
+                    >
+                      <div className="flex items-start gap-2">
+                        <input
+                          type="checkbox"
+                          checked={selectedIds.has(r.id)}
+                          onChange={() => toggleSelect(r.id)}
+                          className="mt-0.5 w-4 h-4 accent-brand shrink-0"
+                        />
+                        <div className="flex-1 min-w-0">
+                          {r.requestType === "substitute" ? (
+                            <>
+                              <div className="font-semibold flex items-center gap-1.5">
+                                <span className="text-[10px] px-1.5 py-0.5 rounded bg-purple-100 text-purple-700 font-semibold">대신 근무</span>
+                                <span className="text-brand">{nameOf(r.requesterId)}</span>
+                                <span className="text-gray-400 text-xs">→</span>
+                                <span className="text-amber-700">{nameOf(r.targetId)}</span>
+                              </div>
+                              <div className="text-xs text-gray-600 mt-1 leading-relaxed">
+                                {r.dutyDate} ({r.shift === "full" ? "근무" : r.shift === "day" ? "일직" : "숙직"}) ·{" "}
+                                {r.role === "supervisor" ? "책임관" : r.role === "leader" ? "조장" : "조원"}
+                                <br />
+                                {nameOf(r.requesterId)} 슬롯 → {nameOf(r.targetId)} 투입
+                              </div>
+                            </>
+                          ) : (
+                            <>
+                              <div className="font-semibold">
+                                <span className="text-brand">{nameOf(r.requesterId)}</span>
+                                <span className="mx-1 text-gray-400">↔</span>
+                                <span className="text-amber-700">{nameOf(r.targetId)}</span>
+                              </div>
+                              <div className="text-xs text-gray-600 mt-1 leading-relaxed">
+                                A: {r.dutyDate} ({r.shift === "full" ? "근무" : r.shift === "day" ? "일직" : "숙직"})
+                                <br />
+                                B: {r.targetDutyDate} ({r.targetShift === "full" ? "근무" : r.targetShift === "day" ? "일직" : "숙직"})
+                                <br />
+                                역할: {r.role === "supervisor" ? "책임관" : r.role === "leader" ? "조장" : "조원"}
+                              </div>
+                            </>
+                          )}
+                          {r.reason && (
+                            <div className="text-xs text-gray-500 mt-1 bg-gray-50 rounded px-2 py-1">
+                              사유: {r.reason}
+                            </div>
+                          )}
+                          {(() => {
+                            const risks = detectRequestRisks(r, dutyMap, nameOf);
+                            if (risks.length === 0) return null;
+                            return (
+                              <div className="text-[11px] text-amber-800 mt-1.5 bg-amber-50 border border-amber-200 rounded px-2 py-1.5">
+                                <div className="font-bold">⚠️ 승인 시 주의</div>
+                                {risks.map((x, i) => (
+                                  <div key={i}>· {x}</div>
+                                ))}
+                              </div>
+                            );
+                          })()}
+                          <div className="flex gap-2 mt-2">
+                            <button
+                              onClick={() => approve(r)}
+                              className="flex-1 bg-brand hover:bg-brand-dark text-white py-2 rounded-lg font-semibold text-sm active:scale-[0.98] transition"
+                            >
+                              승인
+                            </button>
+                            <button
+                              onClick={() => reject(r)}
+                              className="flex-1 border py-2 rounded-lg font-semibold text-sm hover:bg-gray-50 active:scale-[0.98] transition"
+                            >
+                              거절
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
               )}
             </>
           )}
 
-          {accepted.length === 0 ? (
-            <div className="text-sm text-gray-400 py-3 text-center">
-              대기 중인 요청 없음
-            </div>
-          ) : filteredAccepted.length === 0 ? (
-            <div className="text-sm text-gray-400 py-3 text-center">
-              해당 유형의 대기 요청 없음
-            </div>
-          ) : (
-            <ul className="space-y-2">
-              {filteredAccepted.map((r) => (
-                <li
-                  key={r.id}
-                  className={`border rounded-xl p-3 text-sm bg-gradient-to-br from-amber-50/40 to-white ${
-                    selectedIds.has(r.id) ? "border-brand ring-1 ring-brand/30" : "border-gray-200"
-                  }`}
-                >
-                  <div className="flex items-start gap-2">
-                    <input
-                      type="checkbox"
-                      checked={selectedIds.has(r.id)}
-                      onChange={() => toggleSelect(r.id)}
-                      className="mt-0.5 w-4 h-4 accent-brand shrink-0"
-                    />
-                    <div className="flex-1 min-w-0">
-                  {r.requestType === "substitute" ? (
-                    <>
-                      <div className="font-semibold flex items-center gap-1.5">
-                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-purple-100 text-purple-700 font-semibold">대신 근무</span>
-                        <span className="text-brand">{nameOf(r.requesterId)}</span>
-                        <span className="text-gray-400 text-xs">→</span>
-                        <span className="text-amber-700">{nameOf(r.targetId)}</span>
+          {/* 시설 예약 탭 */}
+          {mainTab === "rooms" && (
+            <>
+              {pendingRooms.length === 0 ? (
+                <div className="text-sm text-gray-400 py-3 text-center">대기 중인 예약 없음</div>
+              ) : (
+                <ul className="space-y-2">
+                  {pendingRooms.map((r) => (
+                    <li key={r.id} className="border border-gray-200 rounded-xl p-3 text-sm space-y-2 bg-gradient-to-br from-amber-50/30 to-white">
+                      <div className="flex justify-between items-center">
+                        <span className={`text-[11px] px-2 py-0.5 rounded-full font-semibold ${
+                          r.room === "auditorium" ? "bg-indigo-100 text-indigo-700" : "bg-emerald-100 text-emerald-700"
+                        }`}>
+                          {ROOM_LABELS[r.room]}
+                        </span>
+                        <span className="text-xs text-gray-400">{nameOf(r.requesterId)}</span>
                       </div>
-                      <div className="text-xs text-gray-600 mt-1 leading-relaxed">
-                        {r.dutyDate} ({r.shift === "full" ? "근무" : r.shift === "day" ? "일직" : "숙직"}) ·{" "}
-                        {r.role === "supervisor" ? "책임관" : r.role === "leader" ? "조장" : "조원"}
-                        <br />
-                        {nameOf(r.requesterId)} 슬롯 → {nameOf(r.targetId)} 투입
+                      <div>
+                        <div className="font-semibold text-gray-800">
+                          {r.date}{r.endDate && r.endDate !== r.date ? ` ~ ${r.endDate}` : ""}
+                          <span className="text-gray-500 font-normal ml-2 text-xs">{r.startTime} ~ {r.endTime}</span>
+                        </div>
+                        <div className="text-xs text-gray-600 mt-0.5">{r.purpose}</div>
                       </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className="font-semibold">
-                        <span className="text-brand">{nameOf(r.requesterId)}</span>
-                        <span className="mx-1 text-gray-400">↔</span>
-                        <span className="text-amber-700">{nameOf(r.targetId)}</span>
-                      </div>
-                      <div className="text-xs text-gray-600 mt-1 leading-relaxed">
-                        A: {r.dutyDate} ({r.shift === "full" ? "근무" : r.shift === "day" ? "일직" : "숙직"})
-                        <br />
-                        B: {r.targetDutyDate} ({r.targetShift === "full" ? "근무" : r.targetShift === "day" ? "일직" : "숙직"})
-                        <br />
-                        역할: {r.role === "supervisor" ? "책임관" : r.role === "leader" ? "조장" : "조원"}
-                      </div>
-                    </>
-                  )}
-                  {r.reason && (
-                    <div className="text-xs text-gray-500 mt-1 bg-gray-50 rounded px-2 py-1">
-                      사유: {r.reason}
-                    </div>
-                  )}
-                  {(() => {
-                    const risks = detectRequestRisks(r, dutyMap, nameOf);
-                    if (risks.length === 0) return null;
-                    return (
-                      <div className="text-[11px] text-amber-800 mt-1.5 bg-amber-50 border border-amber-200 rounded px-2 py-1.5">
-                        <div className="font-bold">⚠️ 승인 시 주의</div>
-                        {risks.map((x, i) => (
-                          <div key={i}>· {x}</div>
-                        ))}
-                      </div>
-                    );
-                  })()}
-                  <div className="flex gap-2 mt-2">
-                    <button
-                      onClick={() => approve(r)}
-                      className="flex-1 bg-brand hover:bg-brand-dark text-white py-2 rounded-lg font-semibold text-sm active:scale-[0.98] transition"
-                    >
-                      승인
-                    </button>
-                    <button
-                      onClick={() => reject(r)}
-                      className="flex-1 border py-2 rounded-lg font-semibold text-sm hover:bg-gray-50 active:scale-[0.98] transition"
-                    >
-                      거절
-                    </button>
-                  </div>
-                    </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
+                      {roomRejectingId === r.id ? (
+                        <div className="space-y-2">
+                          <input
+                            type="text"
+                            placeholder="반려 사유 (선택사항)"
+                            value={roomRejectNote}
+                            onChange={(e) => setRoomRejectNote(e.target.value)}
+                            className="w-full border rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:border-brand"
+                            autoFocus
+                          />
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => { setRoomRejectingId(null); setRoomRejectNote(""); }}
+                              className="flex-1 border py-1.5 rounded-lg text-xs font-semibold hover:bg-gray-50"
+                            >
+                              취소
+                            </button>
+                            <button
+                              onClick={() => rejectRoom(r)}
+                              className="flex-1 bg-red-500 text-white py-1.5 rounded-lg text-xs font-bold"
+                            >
+                              반려 확정
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => { setRoomRejectingId(r.id); setRoomRejectNote(""); }}
+                            className="flex-1 border py-2 rounded-lg text-xs font-semibold text-gray-600 hover:bg-gray-50"
+                          >
+                            반려
+                          </button>
+                          <button
+                            onClick={() => approveRoom(r)}
+                            className="flex-1 bg-green-500 text-white py-2 rounded-lg text-xs font-bold"
+                          >
+                            승인
+                          </button>
+                        </div>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </>
           )}
         </section>
 
