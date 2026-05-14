@@ -40,7 +40,7 @@ export function NavBar() {
         { href: "/calendar", label: "캘린더",  icon: "📅" },
         { href: "/request",  label: "요청",    icon: "🔁" },
         { href: "/inbox",    label: "요청내역", icon: "📤" },
-        { href: "/chat",     label: "채팅",    icon: "💬", badge: "chat" as const },
+        { href: "/chat",     label: "공지/채팅", icon: "💬", badge: "chat" as const },
         { href: "/rooms",    label: "예약",    icon: "🏢", badge: "rooms" as const },
       ];
 
