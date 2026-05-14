@@ -21,7 +21,14 @@ export function useNotifications() {
   const sendNotification = (title: string, body: string) => {
     if (!("Notification" in window)) return;
     if (Notification.permission !== "granted") return;
-    new Notification(title, { body, icon: "/symbol.png" });
+    try {
+      // Android Chrome requires ServiceWorker.showNotification() instead
+      new Notification(title, { body, icon: "/symbol.png" });
+    } catch {
+      navigator.serviceWorker?.ready
+        .then((sw) => sw.showNotification(title, { body, icon: "/symbol.png" }))
+        .catch(() => {});
+    }
   };
 
   const setBadge = (count: number) => {
