@@ -110,11 +110,12 @@ export default function ChatPage() {
     return CHANNEL_META[activeChannel].fsId;
   }, [activeChannel, dmTarget, myId]);
 
-  // 채널 전환 → 읽음 처리
+  // 채널 전환 or 세션 로드 완료 시 읽음 처리
+  // markRead는 myId가 바뀔 때 새 참조를 가지므로, myId 로드 후 자동 재실행됨
   useEffect(() => {
     if (!activeFsChannel) return;
     markRead(activeFsChannel);
-  }, [activeFsChannel]); // eslint-disable-line
+  }, [activeFsChannel, markRead]);
 
   // 메시지 구독 + 새 메시지 도착 시 읽음 처리
   useEffect(() => {

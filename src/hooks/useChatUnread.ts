@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { collection, doc, onSnapshot, orderBy, query, setDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useAuth } from "./useAuth";
@@ -107,11 +107,11 @@ export function useChatUnread() {
     return notices.filter((n) => n.createdAt > readAt && n.authorId !== myId).length;
   }, [notices, readTs, myId]);
 
-  // 채널 읽음 처리
-  const markRead = async (channelId: string) => {
+  // 채널 읽음 처리 — useCallback으로 myId 변경 시 새 참조 생성
+  const markRead = useCallback(async (channelId: string) => {
     if (!myId) return;
     await setDoc(doc(db, "userRead", myId), { [channelId]: Date.now() }, { merge: true });
-  };
+  }, [myId]);
 
   return { hasAnyUnread, unreadChannels, unreadDmUsers, unreadNoticeCount, markRead };
 }
